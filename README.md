@@ -1,2 +1,2 @@
 # P2-Sistos
-Proyecto # 2 - Simulador
+Sistemas Operativos Proyecto - # 2: Simulador
