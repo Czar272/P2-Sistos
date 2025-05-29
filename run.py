@@ -4,8 +4,9 @@ from algorithms.priority import priority_schedule
 from algorithms.sjf import sjf_schedule
 from algorithms.srt import srt_schedule
 from algorithms.round_robin import round_robin_schedule
-
+from sync.sync_simulator import plot_mutex_gantt, print_mutex_timeline_ascii, simulate_mutex
 import matplotlib.pyplot as plt
+from utils.sync_parser import parse_actions, parse_resources
 
 
 
@@ -85,10 +86,22 @@ def print_metrics(processes):
 
 # --------------- PRIORITY ---------------
 
+# if __name__ == "__main__":
+#     file_path = 'data/procesos.txt'
+#     processes = parse_processes(file_path)
+#     timeline, updated_processes = priority_schedule(processes)
+#     print_timeline(timeline)
+#     print_metrics(updated_processes)
+#     plot_gantt(timeline)
+
+
 if __name__ == "__main__":
-    file_path = 'data/procesos.txt'
-    processes = parse_processes(file_path)
-    timeline, updated_processes = priority_schedule(processes)
-    print_timeline(timeline)
-    print_metrics(updated_processes)
-    plot_gantt(timeline)
+
+    resources = parse_resources("data/recursos.txt")
+    actions = parse_actions("data/acciones.txt")
+
+    timeline = simulate_mutex(resources, actions)
+    print_mutex_timeline_ascii(timeline, max_cycles=20)
+    plot_mutex_gantt(timeline, max_cycles=20)
+
+
