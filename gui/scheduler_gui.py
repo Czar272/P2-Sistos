@@ -62,8 +62,14 @@ class SchedulerGUI(tk.Tk):
         # Botón cargar archivo
         ttk.Button(self, text="Cargar archivo de procesos", command=self.load_file).pack(pady=5)
 
+        self.file_label = ttk.Label(self, text="Archivo no cargado", foreground="gray")
+        self.file_label.pack(pady=2)
+
+
         # Botón de simulación
         ttk.Button(self, text="Simular", command=self.run_simulation).pack(pady=10)
+        ttk.Button(self, text="Limpiar Campos", command=self.clear_fields).pack(pady=5)
+
 
         # Área para gráficos
         self.graph_frame = ttk.Frame(self)
@@ -74,12 +80,21 @@ class SchedulerGUI(tk.Tk):
             self.quantum_frame.pack(pady=5)
         else:
             self.quantum_frame.forget()
+    
+    def clear_fields(self):
+        self.selected_algo.set("")
+        self.quantum.set("")
+        self.file_path = None
+        self.file_label.config(text="Archivo no cargado", foreground="gray")
+
 
     def load_file(self):
         path = filedialog.askopenfilename(filetypes=[("Archivos de texto", "*.txt")])
         if path:
             self.file_path = path
-            messagebox.showinfo("Archivo cargado", f"Archivo seleccionado:\n{path}")
+            filename = os.path.basename(path)
+            self.file_label.config(text=f"📄 {filename} cargado", foreground="green")
+
 
     def run_simulation(self):
         if not self.file_path or not self.selected_algo.get():

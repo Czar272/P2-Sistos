@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from utils.sync_parser import parse_resources, parse_actions
@@ -44,10 +45,17 @@ class SyncGUI(tk.Tk):
 
         # Botones para cargar archivos
         ttk.Button(self, text="Cargar recursos.txt", command=lambda: self.load_file("recursos")).pack(pady=2)
+        self.rec_label = ttk.Label(self, text="recursos.txt no cargado", foreground="gray")
+        self.rec_label.pack(pady=1)
+
         ttk.Button(self, text="Cargar acciones.txt", command=lambda: self.load_file("acciones")).pack(pady=2)
+        self.act_label = ttk.Label(self, text="acciones.txt no cargado", foreground="gray")
+        self.act_label.pack(pady=1)
 
         # Botón para ejecutar simulación
+        ttk.Button(self, text="Limpiar Campos", command=self.clear_fields).pack(pady=5)
         ttk.Button(self, text="Simular", command=self.run_simulation).pack(pady=10)
+
 
         # Frame gráfico
         self.graph_frame = ttk.Frame(self)
@@ -58,11 +66,23 @@ class SyncGUI(tk.Tk):
         subprocess.Popen([sys.executable, "gui/main.py"])
 
 
-    def load_file(self, file_type):
+    def load_file(self, tipo):
         path = filedialog.askopenfilename(filetypes=[("Archivos de texto", "*.txt")])
         if path:
-            self.paths[file_type] = path
-            messagebox.showinfo("Archivo cargado", f"{file_type}.txt cargado:\n{path}")
+            self.paths[tipo] = path
+            filename = os.path.basename(path)
+            if tipo == "recursos":
+                self.rec_label.config(text=f"📄 {filename} cargado", foreground="green")
+            else:
+                self.act_label.config(text=f"📄 {filename} cargado", foreground="green")
+
+    def clear_fields(self):
+        self.mode.set("")
+        self.paths["recursos"] = None
+        self.paths["acciones"] = None
+        self.rec_label.config(text="recursos.txt no cargado", foreground="gray")
+        self.act_label.config(text="acciones.txt no cargado", foreground="gray")
+
 
     def run_simulation(self):
         if not self.mode.get():
