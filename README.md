@@ -2,6 +2,10 @@
 
 Sistemas Operativos Proyecto - # 2: Simulador
 
+## Autor
+
+- Pablo Cesar Lopez Medina - 22535
+
 ## Descripción General
 
 Este proyecto implementa un simulador visual interactivo para el curso de Sistemas Operativos. Incluye:
