@@ -11,6 +11,10 @@ def simulate_mutex(resources, actions, max_cycles=20):
     for action in actions:
         actions_by_cycle[action.cycle].append(action)
 
+    for res in resources.values():
+        res.count = 1
+        res.available = 1
+
     current_cycle = 0
     pending_actions = []
 
