@@ -93,3 +93,50 @@ def plot_mutex_gantt(timeline, max_cycles=20):
     plt.tight_layout()
     plt.show()
 
+def simulate_semaphore(resources, actions, max_cycles=20):
+    timeline = defaultdict(list)  # ciclo → [acciones]
+    held_resources = defaultdict(list)  # recurso → list of (pid, release_time)
+
+    actions_by_cycle = defaultdict(list)
+    for action in actions:
+        actions_by_cycle[action.cycle].append(action)
+
+    current_cycle = 0
+    pending_actions = []
+
+    print("🔁 Simulación de Semáforos")
+
+    while current_cycle < max_cycles:
+        print(f"\n⏱️ Ciclo {current_cycle}:")
+
+        # Liberar recursos ocupados si corresponde
+        for res_name, holds in held_resources.items():
+            releasing = [entry for entry in holds if entry[1] <= current_cycle]
+            held_resources[res_name] = [entry for entry in holds if entry[1] > current_cycle]
+            if releasing:
+                resources[res_name].available += len(releasing)
+                for entry in releasing:
+                    print(f"🔓 Recurso {res_name} liberado por {entry[0]}")
+
+        # Agregar acciones nuevas del ciclo actual
+        current_actions = actions_by_cycle[current_cycle] + pending_actions
+        pending_actions = []
+
+        for action in current_actions:
+            res = action.resource_name
+            if resources[res].available > 0:
+                # Acceso exitoso
+                resources[res].available -= 1
+                held_resources[res].append((action.pid, current_cycle + 1))
+                timeline[current_cycle].append((action.pid, action.action_type, res, "ACCESSED"))
+                print(f"✅ {action.pid} {action.action_type} {res} → ACCESSED")
+            else:
+                # Espera
+                timeline[current_cycle].append((action.pid, action.action_type, res, "WAITING"))
+                pending_actions.append(action)
+                print(f"⛔ {action.pid} {action.action_type} {res} → WAITING")
+
+        current_cycle += 1
+
+    return timeline
+

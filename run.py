@@ -4,7 +4,7 @@ from algorithms.priority import priority_schedule
 from algorithms.sjf import sjf_schedule
 from algorithms.srt import srt_schedule
 from algorithms.round_robin import round_robin_schedule
-from sync.sync_simulator import plot_mutex_gantt, print_mutex_timeline_ascii, simulate_mutex
+from sync.sync_simulator import plot_mutex_gantt, print_mutex_timeline_ascii, simulate_mutex, simulate_semaphore
 import matplotlib.pyplot as plt
 from utils.sync_parser import parse_actions, parse_resources
 
@@ -96,12 +96,11 @@ def print_metrics(processes):
 
 
 if __name__ == "__main__":
-
     resources = parse_resources("data/recursos.txt")
     actions = parse_actions("data/acciones.txt")
+    timeline = simulate_semaphore(resources, actions)
+    print_mutex_timeline_ascii(timeline)
+    plot_mutex_gantt(timeline)
 
-    timeline = simulate_mutex(resources, actions)
-    print_mutex_timeline_ascii(timeline, max_cycles=20)
-    plot_mutex_gantt(timeline, max_cycles=20)
 
 
