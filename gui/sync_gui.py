@@ -4,6 +4,8 @@ from utils.sync_parser import parse_resources, parse_actions
 from sync.sync_simulator import simulate_mutex, simulate_semaphore, plot_mutex_gantt
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import subprocess, sys
+
 
 
 class SyncGUI(tk.Tk):
@@ -34,6 +36,7 @@ class SyncGUI(tk.Tk):
         self.control_frame = ttk.Frame(self)
         self.control_frame.pack(pady=5)
 
+        ttk.Button(self, text="⬅ Regresar al Menú Principal", command=self.back_to_menu).pack(pady=5)
         ttk.Button(self.control_frame, text="⏸ Pausar/Reanudar", command=self.toggle_pause).pack(side="left", padx=5)
         ttk.Button(self.control_frame, text="🔄 Reiniciar", command=self.restart_animation).pack(side="left", padx=5)
         ttk.Button(self.control_frame, text="💾 Exportar PNG", command=self.export_image).pack(side="left", padx=5)
@@ -49,6 +52,11 @@ class SyncGUI(tk.Tk):
         # Frame gráfico
         self.graph_frame = ttk.Frame(self)
         self.graph_frame.pack(fill="both", expand=True)
+
+    def back_to_menu(self):
+        self.destroy()
+        subprocess.Popen([sys.executable, "gui/main.py"])
+
 
     def load_file(self, file_type):
         path = filedialog.askopenfilename(filetypes=[("Archivos de texto", "*.txt")])

@@ -11,6 +11,8 @@ from algorithms.sjf import sjf_schedule
 from algorithms.srt import srt_schedule
 from algorithms.round_robin import round_robin_schedule
 from algorithms.priority import priority_schedule
+import subprocess, sys
+
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
@@ -42,6 +44,7 @@ class SchedulerGUI(tk.Tk):
         self.control_frame = ttk.Frame(self)
         self.control_frame.pack(pady=5)
 
+        ttk.Button(self, text="⬅ Regresar al Menú Principal", command=self.back_to_menu).pack(pady=5)
         ttk.Button(self.control_frame, text="⏸ Pausar/Reanudar", command=self.toggle_pause).pack(side="left", padx=5)
         ttk.Button(self.control_frame, text="🔄 Reiniciar", command=self.restart_animation).pack(side="left", padx=5)
         ttk.Button(self.control_frame, text="💾 Exportar PNG", command=self.export_image).pack(side="left", padx=5)
@@ -172,5 +175,10 @@ class SchedulerGUI(tk.Tk):
         self.current_segment += 1
         self.canvas.draw()
         self.after(500, self.animate_schedule)
+    
+    def back_to_menu(self):
+        self.destroy()
+        subprocess.Popen([sys.executable, "gui/main.py"])
+
 
 

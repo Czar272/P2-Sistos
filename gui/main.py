@@ -18,5 +18,6 @@ tk.Label(app, text="Seleccione el tipo de simulación:", font=("Arial", 12)).pac
 
 tk.Button(app, text="Calendarización", width=20, command=open_scheduler).pack(pady=5)
 tk.Button(app, text="Sincronización", width=20, command=open_sync).pack(pady=5)
+tk.Button(app, text="❌ Salir", width=30, command=app.destroy).pack(pady=20)
 
 app.mainloop()
